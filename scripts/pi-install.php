@@ -10,7 +10,7 @@
 //
 // Figure out where the root directory is.  This file may be symlinked
 //
-$ciniki_root = dirname(__FILE__);
+$ciniki_root = dirname(dirname(dirname(dirname(__FILE__))));
 $modules_dir = $ciniki_root . '/ciniki-mods';
 
 //
