@@ -29,12 +29,26 @@ function qruqsp_piadmin_hooks_uiSettings(&$ciniki, $tnid, $args) {
             || ($ciniki['session']['user']['perms']&0x01) == 0x01
             )
         ) {
-        $menu_item = array(
-            'priority'=>1000,
-            'label'=>'Pi Admin',
-            'edit'=>array('app'=>'qruqsp.piadmin.main'),
+        $rsp['settings_menu_items'][] = array(
+            'priority'=>950,
+            'label'=>'Set SSH Password',
+            'edit'=>array('app'=>'qruqsp.piadmin.sshpasswd'),
             );
-        $rsp['settings_menu_items'][] = $menu_item;
+/*        $rsp['settings_menu_items'][] = array(
+            'priority'=>941,
+            'label'=>'Wifi Setup',
+            'edit'=>array('app'=>'qruqsp.piadmin.wifi'),
+            ); */
+/*        $rsp['settings_menu_items'][] = array(
+            'priority'=>940,
+            'label'=>'Ethernet Setup',
+            'edit'=>array('app'=>'qruqsp.piadmin.ethernet'),
+            ); */
+        $rsp['settings_menu_items'][] = array(
+            'priority'=>910,
+            'label'=>'Set Date and Time',
+            'edit'=>array('app'=>'qruqsp.piadmin.datetime'),
+            );
     }
 
     return $rsp;
