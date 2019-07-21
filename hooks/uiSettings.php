@@ -49,6 +49,21 @@ function qruqsp_piadmin_hooks_uiSettings(&$ciniki, $tnid, $args) {
             'label'=>'Set Date and Time',
             'edit'=>array('app'=>'qruqsp.piadmin.datetime'),
             );
+        $rsp['settings_menu_items'][] = array(
+            'priority'=>907,
+            'label'=>'System Update',
+            'edit'=>array('app'=>'qruqsp.piadmin.update'),
+            );
+        $rsp['settings_menu_items'][] = array(
+            'priority'=>906,
+            'label'=>'Reboot',
+            'edit'=>array('app'=>'qruqsp.piadmin.reboot'),
+            );
+        $rsp['settings_menu_items'][] = array(
+            'priority'=>905,
+            'label'=>'Power Off',
+            'edit'=>array('app'=>'qruqsp.piadmin.shutdown'),
+            );
     }
 
     return $rsp;
