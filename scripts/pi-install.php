@@ -1787,7 +1787,6 @@ function install($ciniki_root, $modules_dir, $args) {
     $config['ciniki.core']['qruqsp_tnid'] = 0;
     $config['ciniki.core']['single_tenant_mode'] = "'yes'";
 
-
     $config['ciniki.core']['alerts.notify'] = $admin_email;
     $config['ciniki.core']['system.email'] = $system_email;
     $config['ciniki.core']['system.email.name'] = $system_email_name;
@@ -2000,8 +1999,9 @@ function install($ciniki_root, $modules_dir, $args) {
         //
         // Add the master tenant, if it doesn't already exist
         //
-        $strsql = "INSERT INTO ciniki_tenants (id, uuid, name, tagline, description, status, date_added, last_updated) VALUES ("
-            . "'1', UUID(), '$master_name', '', '', 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+        $strsql = "INSERT INTO ciniki_tenants (id, uuid, flags, name, tagline, description, status, date_added, last_updated) "
+            . "VALUES ("
+            . "'1', UUID(), 2, '$master_name', '', '', 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())";
         $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
         if( $rc['stat'] != 'ok' ) {
             ciniki_core_dbTransactionRollback($ciniki, 'core');

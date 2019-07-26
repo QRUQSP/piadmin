@@ -49,11 +49,16 @@ function qruqsp_piadmin_hooks_uiSettings(&$ciniki, $tnid, $args) {
             'label'=>'Set Date and Time',
             'edit'=>array('app'=>'qruqsp.piadmin.datetime'),
             );
-        $rsp['settings_menu_items'][] = array(
-            'priority'=>907,
-            'label'=>'System Update',
-            'edit'=>array('app'=>'qruqsp.piadmin.update'),
-            );
+        //
+        // Only allow code update when not a git repo and instead was installed from qruqsp.org/ciniki-picode
+        //
+        if( !file_exists(dirname($ciniki['config']['ciniki.core']['root_dir']) . '/.git') ) {
+            $rsp['settings_menu_items'][] = array(
+                'priority'=>907,
+                'label'=>'System Update',
+                'edit'=>array('app'=>'qruqsp.piadmin.update'),
+                );
+        }
         $rsp['settings_menu_items'][] = array(
             'priority'=>906,
             'label'=>'Reboot',
