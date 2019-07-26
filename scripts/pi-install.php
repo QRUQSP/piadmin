@@ -1785,6 +1785,7 @@ function install($ciniki_root, $modules_dir, $args) {
     // The master tenant ID will be set later on, once information is in database
     $config['ciniki.core']['master_tnid'] = 0;
     $config['ciniki.core']['qruqsp_tnid'] = 0;
+    $config['ciniki.core']['single_tenant_mode'] = "'yes'";
 
 
     $config['ciniki.core']['alerts.notify'] = $admin_email;
