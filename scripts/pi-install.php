@@ -2022,7 +2022,7 @@ function install($ciniki_root, $modules_dir, $args) {
         // Add sysadmin as the owner of the master tenant
         //
         $strsql = "INSERT INTO ciniki_tenant_users (uuid, tnid, user_id, package, permission_group, status, date_added, last_updated) VALUES ("
-            . "UUID(), '1', '1', 'ciniki', 'owners', '1', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+            . "UUID(), '1', '1', 'ciniki', 'owners', '10', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
         $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
         if( $rc['stat'] != 'ok' ) {
             ciniki_core_dbTransactionRollback($ciniki, 'core');
