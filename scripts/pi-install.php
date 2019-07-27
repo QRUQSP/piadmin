@@ -962,15 +962,16 @@ table.list td dl:first-child {
     margin-top: 0em;
 }
 table.list td dl dt {
-    display: block;
-    clear: left;
+    display: inline-block;
     float: left;
+    text-align: right;
+    width: 10%;
 }
 table.list td dl dd {
-    display: block;
+    display: inline-block;
     padding-left: 1em;
+    width: 90%;
 }
-
 
 table.list td em {
     font-weight: bold;
@@ -1665,10 +1666,52 @@ table.list > tbody > tr.followup > td.content {
     text-decoration: normal;
     white-space: pre-wrap;
 }
+table.list dt {
+    text-align: right;
+}
+table.help td:first-child {
+    text-align: right;
+    min-width: 3em;
+    padding-right: 1em;
+}
+table.list tr.textfield > td.select {
+    width: 100%;
+    height: 100%;
+}
+
+table.form td.input > select,
+table.form td.select > select {
+    width: 100%;
+    height: 100%;
+    padding: 0.4em;
+    font-size: 1.0em;
+    color: #555;
+    text-align: left;
+    margin: 0.4em 0em 0.4em 0em;
+    border: 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 1px solid #ccc;
+}
+
+table.form td.input > select {
+    height: 2em;
+    margin: 0em;
+    border-radius: initial;
+}
+table.form td.small input {
+    max-width: 10em;
+}
+table.form td.tiny input {
+    max-width: 5em;
+}
+
 
 </style>
 </head>
 <body id="m_body">
+<div id="m_loading" style="display:none;"><table><tr><td><?php print "<img src='ciniki-mods/core/ui/themes/default/img/spinner.gif' />"; ?>
+</td></table></div>
 <div id='m_container' class="s-normal">
     <table id="mc_header" class="headerbar" cellpadding="0" cellspacing="0">
         <tr>
@@ -1693,21 +1736,54 @@ table.list > tbody > tr.followup > td.content {
                     }
                 ?>
                 <?php if( $display_form == 'yes' ) { ?>
-                    <form id="mapp_installer_form" method="POST" name="mapp_installer_form">
+                    <form id="mapp_installer_form" method="POST" name="mapp_installer_form" onsubmit="document.getElementById('m_loading').style.display='block';">
                         <div class="section">
-                        <h2></h2>
+                        <h2>Station Information</h2>
                         <table class="list noheader form outline" cellspacing='0' cellpadding='0'>
                             <tbody>
-                            <tr class="textfield"><td class="label"><label for="first">First</label></td>
+                            <tr class="textfield"><td class="label"><label for="callsign">Station Callsign</label></td>
+                                <td class="input small"><input type="text" id="callsign" name="callsign" /></td></tr>
+                            <tr class="textfield"><td class="label"><label for="ssid">SSID</label></td>
+                                <td class="input tiny"><input type="text" id="ssid" name="ssid" /></td></tr>
+                            <tr class="textfield"><td class="label"></td>
+                                <td class="input">The SSID is the station SSID after the callsign. 
+                                The following are recommended values for APRS:<br/>
+                                <table class="help"><td>0</td><td>No SSID</td></tr>
+                                <tr><td>1-4</td><td>Digipeaters</td></tr>
+                                <tr><td>5</td><td>Smartphones</td></tr>
+                                <tr><td>6</td><td>Satellite or special operations</td></tr>
+                                <tr><td>7</td><td>Reserved for handhelds</td></tr>
+                                <tr><td>8</td><td>Boats or maritime mobile</td></tr>
+                                <tr><td>9</td><td>Mobiles or trackers</td></tr>
+                                <tr><td>10</td><td>Igates or internet operation</td></tr>
+                                <tr><td>11</td><td>Reserved for balloons</td></tr>
+                                <tr><td>12</td><td>Tracker Boxes</td></tr>
+                                <tr><td>13</td><td>Weather Stations</td></tr>
+                                <tr><td>14</td><td>Truckers</td></tr>
+                                <tr><td>15</td><td>Any other use</td></tr>
+                                </table>
+                                </td></tr>
+                            <tr class="textfield"><td class="label"><label for="timezone">Timezone</label></td>
+                                <td class="input"><select id='timezone' name='timezone'>
+<?php
+    $zones = timezone_identifiers_list();
+
+    foreach($zones as $zone) {
+        print "<option value='$zone'" . ($zone == 'UTC' ? ' selected':'') . ">$zone</option>";
+    }
+?>
+                                </select></td></tr>
+                            </tbody>
+                        </table>
+                        <h2>Operator Information</h2>
+                        <table class="list noheader form outline" cellspacing='0' cellpadding='0'>
+                            <tbody>
+                            <tr class="textfield"><td class="label"><label for="first">First Name</label></td>
                                 <td class="input"><input type="text" id="first" name="first" /></td></tr>
-                            <tr class="textfield"><td class="label"><label for="last">Last</label></td>
+                            <tr class="textfield"><td class="label"><label for="last">Last Name</label></td>
                                 <td class="input"><input type="text" id="last" name="last" /></td></tr>
                             <tr class="textfield"><td class="label"><label for="email">Email</label></td>
                                 <td class="input"><input type="email" id="email" name="email" /></td></tr>
-                            <tr class="textfield"><td class="label"><label for="callsign">Callsign</label></td>
-                                <td class="input"><input type="text" id="callsign" name="callsign" /></td></tr>
-                            <tr class="textfield"><td class="label"><label for="ssid">SSID</label></td>
-                                <td class="input"><input type="text" id="ssid" name="ssid" /></td></tr>
                             <tr class="textfield"><td class="label"><label for="password">Password</label></td>
                                 <td class="input"><input type="password" id="password" name="password" /></td></tr>
                             </tbody>
