@@ -1766,7 +1766,7 @@ function install($ciniki_root, $modules_dir, $args) {
     $config['ciniki.core']['code_dir'] = $ciniki_root . '/ciniki-picode';
     $config['ciniki.core']['logging.api.dir'] = dirname($ciniki_root) . '/logs';
     $config['ciniki.core']['logging.api.db'] = "'no'";
-    $config['ciniki.core']['logging.api.file'] = "'yes'";
+    $config['ciniki.core']['logging.api.file'] = "'no'";
 
     // Default session timeout to 7 days 
     $config['ciniki.core']['session_timeout'] = 604800;
