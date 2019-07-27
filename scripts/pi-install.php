@@ -63,6 +63,7 @@ $valid_args = array(
     '-sc' => array('field'=>'sync_code_url', 'mandatory'=>'no'),
     '-un' => array('field'=>'server_name', 'mandatory'=>'yes'),
     '-ru' => array('field'=>'request_uri', 'mandatory'=>'no'),
+    '-tz' => array('field'=>'timezone', 'mandatory'=>'no'),
     '-80' => array('field'=>'disable_ssl', 'mandatory'=>'no'),
     );
 //
@@ -91,6 +92,7 @@ if( php_sapi_name() == 'cli' ) {
         'server_name' => '',
         'request_uri' => '',
         'http_host' => '',
+        'timezone' => 'UTC',
         );
     //
     // Grab the args into array
@@ -175,6 +177,7 @@ else {
             'request_uri' => $_SERVER['REQUEST_URI'],
             'http_host' => $_SERVER['HTTP_HOST'],
             'disable_ssl' => 'yes',
+            'timezone' => $_POST['timezone'],
             );
 
         $rc = install($ciniki_root, $modules_dir, $args);
@@ -2095,6 +2098,18 @@ function install($ciniki_root, $modules_dir, $args) {
         $config['ciniki.mail']['poweredby.name'] = "Ciniki";
 
         //
+        // Add the timezone
+        //
+        $strsql = "INSERT INTO ciniki_tenant_details (tnid, detail_key, detail_value, date_added, last_updated) "
+            . "VALUES ("
+            . "'1', 'intl-default-timezone', '" . $args['timezone'] . "', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+        $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
+        if( $rc['stat'] != 'ok' ) {
+            ciniki_core_dbTransactionRollback($ciniki, 'core');
+            return array('form'=>'yes', 'err'=>'ciniki.' . $rc['err']['code'], 'msg'=>"Failed to setup timezone<br/><br/>" . $rc['err']['msg']);
+        }
+        
+        //
         // Add sysadmin as the owner of the master tenant
         //
         $strsql = "INSERT INTO ciniki_tenant_users (uuid, tnid, user_id, package, permission_group, status, date_added, last_updated) VALUES ("
@@ -2195,7 +2210,7 @@ function install($ciniki_root, $modules_dir, $args) {
         . "# Force redirect to strip www from front of domain names\n"
         . "RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]\n"
         . "RewriteRule ^(.*)$ http://%1/$1 [R=301,L]\n"
-        . "RewriteRule ^$ http://%1/manager [R=307,L]\n"
+        . "RewriteRule ^$ /manager [R=307,L]\n"
         . "# Allow access to artweb themes and cache, everything is considered public\n"
         . "RewriteRule ^ciniki-web-layouts/(.*\.)(css|js|png|eot|ttf|woff|svg)$ ciniki-mods/web/layouts/$1$2 [L]\n"
         . "RewriteRule ^ciniki-web-themes/(.*\.)(css|js|html|png|jpg)$ ciniki-mods/web/themes/$1$2 [L]\n"
