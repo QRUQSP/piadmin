@@ -195,7 +195,6 @@ function print_page($display_form, $err_code, $err_msg) {
 <head>
 <title>QRUQSP Pi Installer</title>
 <style>
-body { background: #fafafa; }
 /******* The top bar across the window ******/
 .headerbar {
     width: 100%;
@@ -205,7 +204,6 @@ body { background: #fafafa; }
     table-layout: auto;
     z-index: 2;
 }
-
 .headerbar td {
     margin: 0px;
     padding: 0px;
@@ -215,7 +213,6 @@ body { background: #fafafa; }
     border-left: 1px solid #889;
     border-right: 1px solid #667;
 }
-
 .headerbar td.leftbuttons {
     text-align:left;
     margin: 0px;
@@ -225,7 +222,6 @@ body { background: #fafafa; }
     min-width: 2.5em;
     padding-top: 0px;
 }
-
 .headerbar td.rightbuttons {
     text-align:right;
     margin: 0px;
@@ -236,14 +232,12 @@ body { background: #fafafa; }
     min-width: 2.0em;
     padding-top: 0px;
 }
-
 .headerbar td.avatar {
     text-align: center;
     width: 3.0em;
     cursor: pointer;
     vertical-align: middle;
 }
-
 .headerbar td.homebutton img.avatar {
     width: 1.8em;
     height: 1.8em;
@@ -251,7 +245,6 @@ body { background: #fafafa; }
     border: 1px solid #eee;
     vertical-align: middle;
 }
-
 .headerbar td.title {
     min-width: 10%; 
     width: 80%;
@@ -267,33 +260,25 @@ body { background: #fafafa; }
     border-left: 0px;
     border-right: 0px;
 }
-
 .headerbar td img {
     width: 1.9em;
     padding: 0px;
     margin: 0px;
     vertical-align: middle;
 }
-
 .headerbar td.helpbutton {
     border-right: 0px;
     padding-top: 0px;
 }
-
 .headerbar td.homebutton {
     cursor: pointer;
     border-left: 0px;
 }
-
 .headerbar td.hide {
     border-left: 0px;
     border-right: 0px;
     cursor: inherit;
 }
-
-.headerbar td.show {
-}
-
 .headerbar td div.button {
     display: table-cell;
     font-size: 0.8em;
@@ -306,12 +291,10 @@ body { background: #fafafa; }
     color: #ddd;
     cursor: pointer;
 }
-
 .headerbar td div.button span {
     display: inline-block;
     width: 100%;
 }
-
 .headerbar td div.button span.icon {
     font-size: 1.1em;
     text-decoration: none;
@@ -338,30 +321,6 @@ div.medium {
     padding-top: 1em;
     padding-bottom: 1em;
 }
-div.leftpanel {
-    vertical-align: top;
-    display: inline-block;
-    width: 45% !important;
-}
-div.rightpanel {
-    vertical-align: top;
-    display: inline-block;
-    width: 45% !important;
-    padding-left: 1em;
-}
-
-div.xlarge,
-div.large {
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
-
-div.wide {
-    padding-top: 1em;
-    padding-bottom: 1em;
-}
-
-
 h2 {
     display: block;
     font-size: 1.1em;
@@ -375,176 +334,81 @@ h2 {
     white-space: nowrap;
     color: #555;
 }
-
-h2 span.count {
-    position: relative;
-    vertical-align: middle;
-    top: -0.1em;
-    margin-bottom: 0.3em;
-    margin-top: -0.3em;
-    padding: 0.2em 0.8em 0.2em 0.8em;
-    font-size: 0.6em;
-}
-
-span.count {
-    font-weight: normal;
-    color: #777;
-    background: #eee;
-    display: inline-block;
-    border: 1px solid #bbb;
-    padding: 0.2em 0.7em 0.2em 0.7em;
-    margin: 0px;
-}
-
-table.list td span.count {
-    font-size: 0.7em;
-    position: relative;
-    margin-top: -0.3em;
-    vertical-align: middle;
-    top: -0.2em;
-    margin-left: 0.5em;
-}
-
 div.narrow table.list,
 div.medium table.list {
     width: 100%;
 }
-
-div.mediumflex table.list {
-    min-width: 40em;
-    max-width: 60em;
-}
-
-div.large table.list {
-    width: 100%;
-}
-
-div.xlarge table.list {
-    max-width: 100%;
-}
-
 table.list {
     text-align: left;
     padding: 0px;
     margin-bottom: 1em;
     table-layout: fixed;
 }
-
 table.form {
     table-layout: auto;
 }
-
-table.thread {
-    table-layout: auto;
-}
-
-table.simplegrid {
-    table-layout: auto;
-    margin-top: 0;
-/*    margin-left: auto;
-    margin-right: auto; */
-    width: 100%;
-}
-
-table.simplegrid th.sortable {
-    cursor: pointer;
-}
-
-div.wide table.datepicker,
-div.wide table.simplegrid {
-    min-width: 40em;
-}
-
-div.wide h2 {
-    width: 100%;
-    min-width: 10em;
-}
-
 table.outline {
     border: 1px solid #ddd;
     padding: 0.1em 0.1em 0.1em 0.1em;
     background-color: rgba(255,255,255,0.4);
 }
-
 table.list > thead,
 table.list > tbody,
 table.list > tfoot {
     width: 100%;
 }
-
 table.list > thead > tr,
 table.list > tfoot > tr,
 table.list > tbody > tr {
     width: 100%;
 }
-
 table.border > thead:first-child > tr:first-child > th,
 table.border > tbody:first-child > tr:first-child > td,
 table.border > tfoot:first-child > tr:first-child > td {
     border-top: 1px solid #bbb;
 }
-
 table.border {
     background: #fff;
 }
-
 table.border > thead > tr > th:first-child,
 table.border > tfoot > tr > td:first-child,
 table.border > tbody > tr > td:first-child {
     border-left: 1px solid #bbb;
 }
-
 table.border > thead > tr > th:last-child,
 table.border > tfoot > tr > td:last-child,
 table.border > tbody > tr > td:last-child {
-/*    border-right: 1px solid #bbb; */
     border-right: 0px;
 }
-
 table.fieldhistory > tbody > tr > td:last-child {
     border-right: 1px solid #bbb; 
 }
-
 table.list > tbody > tr > td,
 table.list > tfoot > tr > td {
     padding: 0.7em 0.5em 0.7em 0.5em;
 }
-/* table.simplegrid > tbody > tr > td {
-    padding: 0.6em 0.5em 0.5em 0.5em;
-} */
-
 table.border > tbody > tr > td,
 table.border > tfoot > tr > td {
     border-bottom: 1px solid #bbb;
 }
-
 table.border > tbody > tr:last-child > td,
 table.border > tfoot > tr:last-child > td {
     border-bottom: 0px;
 }
-
-table.fieldhistory > tbody > tr:last-child > td {
-    border-bottom: 1px solid #bbb;
-}
-
 table.border > tfoot > tr:first-child > td {
     border-top: 1px solid #bbb;
 }
-
 table.list > thead > tr > th {
     padding: 0.5em;
     background: #eee;
 }
-
 table.border > thead > tr > th {
     border-bottom: 1px solid #bbb;
 }
-
 table.list > tbody > tr > td.noborder,
 table.list > tfoot > tr > td.noborder {
     border-right: 0px;
 }
-
 table.list > tbody > tr > td.addbutton {
     text-align: right;
     width: 1.7em;
@@ -553,107 +417,34 @@ table.list > tbody > tr > td.addbutton {
     vertical-align: middle;
     line-height: 1.0em;
 }
-
-table.datepicker > tbody > tr > td.prev,
-table.datepicker > tbody > tr > td.next,
-table.list > tbody > tr > td.buttons,
-table.list > tfoot > tr > td.buttons {
-    text-align: center;
-    vertical-align: middle;
-    line-height: 1.0em;
-    width: 1.9em;
-    padding-right: 0.0em;
-    padding-left: 0.0em;
-}
-
-table.datepicker > tbody > tr > td.prev {
-    text-align: left;
-    padding-left: 0.5em;
-}
-
-table.datepicker > tbody > tr > td.next {
-    text-align: right;
-    padding-right: 0.5em;
-}
-
-table.datepicker > tbody > tr > td.prev span.icon,
-table.datepicker > tbody > tr > td.next span.icon,
-table.list > tbody > tr > td.buttons span.icon,
-table.list > tfoot > tr > td.buttons span.icon,
-table.list > tbody > tr > td.addbutton span.icon {
-    font-size: 0.9em;
-    color: #aaa; 
-}
-
 table.border tr > td.label {
     border-left: 1px solid #bbb;    
     border-right: 0px solid #bbb;    
 }
-
 table.list tr.textfield > td.label {
     padding: 0.5em;
     text-align: right;
 }
-
 table.form tr.textfield > td.label > label {
     white-space: nowrap;
 }
-
-table.simplegrid td.label,
-table.simplelist td.label {
-    text-align: right;
-    color: #bbb;
-    font-size: 0.9em;
-    width: 20%;
-    min-width: 6em;
-    padding: 0.9em 0.55em 0.8em 0.55em;
-}
-
-table.form td.button,
-table.simplebuttons td.button {
-    text-align: center;    
-    cursor: pointer;
-    font-weight: bold; 
-    background: #555;
-    color: #eee;
-    padding: 0.5em 0.5em 0.45em 0.5em;
-}
-
-table.form td.save,
-table.simplebuttons td.save {
-    background: #555;
-    color: #eee;
-}
-
-table.form td.delete,
-table.simplebuttons td.delete {
-    background: #f55;
-    color: #eee;
-
-}
-
 table.border tr.textfield > td.hidelabel {
     border-left: 1px solid #bbb;    
     border-right: 0px;
 }
-
 table.list tr.textfield > td.hidelabel {
     padding: 0.5em 0 0.5em 0.5em;
     width: 5px !important;
     height: 1em;
     overflow: hidden;
 }
-
 table.list tr.textfield > td.hidelabel > label {
     display: none;
     overflow: hidden;
 }
-
 table.border tr > td.input {
     border-left: 1px solid #bbb;    
 }
-
-
 table.list tr > td.input {
     font-size: 1em;
     width: 100%;
@@ -661,15 +452,8 @@ table.list tr > td.input {
     margin: 0px;
     vertical-align: center;
 }
-
-table.simplelist tr > td.input {
-    width: 50%;
-    border-left: 0px;
-}
-
 table.list tr > td input {
     width: 100%;
-/*    height: 1.2em; */
     padding: 0.4em;
     padding-right: 0;
     font-size: 1.0em;
@@ -680,22 +464,10 @@ table.list tr > td input {
     text-overflow: ellipsis
     white-space: nowrap;
 }
-
-table.livesearch tr > td.search {
-    padding-left: 0px;
-    padding-right: 0px;
-}
-
-table.list tr.textfield > td > input.file {
-    height: 1.5em;
-}
-
-
 table.list tr.textfield > td.select {
     width: 100%;
     height: 100%;
 }
-
 table.form td.select > select {
     width: 100%;
     height: 100%;
@@ -709,59 +481,20 @@ table.form td.select > select {
     white-space: nowrap;
     border: 1px solid #bbb;
 }
-
 table.list tr.textfield > td.toggle {
     border-left: 0px;
     text-align: left;
     padding: 0.5em;
 }
-
-div.narrow table.list tr.textfield > td.textarea,
-div.medium table.list tr.textfield > td.textarea,
-div.large table.list tr.textfield > td.textarea,
-div.xlarge table.list tr.textfield > td.textarea,
-div.wide table.list tr.textfield > td.textarea {
-    width: 100%;
-}
-
-table.list tr.textfield > td.textarea {
-    background: #fff;
-    padding: 0 0em 0 0em;
-    margin: 0px;
-    padding: 0.4em; 
-}
-
-table.list tr.textfield > td > textarea {
-    width: 100%;
-    height: 10em;
-    padding: 0.4em;
-    padding: 0.0em;
-    font-size: 1.0em;
-    color: #555;
-    text-align: left;
-    margin: 0em;
-    border: 0px;
-}
-
-table.list tr.textfield > td > textarea.small {
-    height: 3em;
-}
-
-table.list tr.textfield > td > textarea.large {
-    height: 20em;
-}
-
 table.list tr > td.noedit {
     padding: 0.5em;
     width: 95%;
     color: #777;
     line-height: 1.2em;
 }
-
 table.border tr > td.historybutton {
     border-right: 1px solid #bbb;    
 }
-
 table.list tr > td.historybutton {
     padding: 0.1em 0.5em 0.1em 0.2em;
     padding: 0px;
@@ -769,11 +502,9 @@ table.list tr > td.historybutton {
     vertical-align: middle;
     text-align: right;
 }
-
 table.list tr.textarea > td.historybutton {
     vertical-align: top;
 }
-
 span.rbutton_on,
 span.rbutton_off {
     display: inline-block;
@@ -787,156 +518,26 @@ span.rbutton_off {
     text-decoration: none;
     font-family: CinikiRegular;
 }
-
 span.rbutton_on {
     color: #000;
 }
-
 span.rbutton_off {
     color: #bbb;
 }
-
 td.input span.rbutton_on,
 td.input span.rbutton_off,
 h2 span.rbutton_off {
     position: relative;
-    /* margin-top: -0.3em; */
-    /* top: -0.2em; */
     margin-left: 0.5em;
 }
-
 h2 span.rbutton_off {
     font-size: 0.7em;
 }
-
-table.list tr > td > img.calendarbutton {
-    padding: 0.1em 0.5em 0.2em 0.2em;
-    cursor: pointer;
-    vertical-align: middle;
-    text-align: right;
-    margin-right: 0px;
-    margin-left: auto;
-    width: 1.4em;
-}
-
-table.border tr.fieldcalendar > td.calendar {
-    border-left: 1px solid #bbb;    
-    border-right: 1px solid #bbb;    
-    border-bottom: 1px solid #bbb;    
-}
-
-table.list tr.fieldcalendar > td.calendar {
-    text-align: left;
-    padding: 0em;
-    width: 100%;
-    vertical-align: top;
-    text-align: center;
-}
-
-table.list div.calendar {
-    display: inline-block;
-    margin: 1px;
-    padding: 0px;
-    vertical-align: top;
-    border: 0px;
-    min-width: 12em;
-}
-
-table.list table.calendar {
-    background: #bbb;
-    border: 0px;
-    empty-cells: show;
-    width: 100%;
-    margin: 1px;
-    padding: 0px;
-    font-size: 0.8em;
-    /* border-collapse: collapse; */
-    border-top: 1px solid #bbb;
-    border-left: 1px solid #bbb;
-}
-
-table.list table.calendar td {
-    text-align: center;
-    padding: 0.25em;
-    background: #eee;
-    border-right: 1px solid #bbb;
-    border-bottom: 1px solid #bbb;
-    cursor: pointer;
-}
-
-table.list table.calendar td.empty {
-    background: #ddd;
-    cursor: default;
-}
-
-table.list table.calendar td.today {
-    background: #dfd;
-}
-
-table.list table.calendar td.selected {
-    background: #ddf;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-table.list table.calendar td.newselection {
-    background: #fdf;
-}
-
-table.list div.calendar table.calendar > thead td {
-    background: #bbb;
-    font-size: 1em;
-}
-
-
-
-table.form tr.fieldcolourpicker    div.colours,
-table.form tr.fieldcolourpicker    div.colourpicker {
-    display: inline-block;
-    border: 0px;
-    vertical-align: top;
-    width: 50%;
-    margin: 0px;
-    padding: 0px;
-    height: 100%;
-}
-
-table.form tr.fieldcolourpicker span.colourswatch {
-    margin: 0.3em;
-    cursor: pointer;
-}
-
-table.form tr.fieldcolourpicker div.colourpicker table.colourpicker {
-    border: 1px solid #bbb;
-    width: 100%;
-}
-
-table.form tr.fieldcolourpicker div.colourpicker table.colourpicker td {
-    vertical-align: top;
-    text-align: center;
-    background: #eee;
-    padding: 0.3em;
-}
-
-table.form tr.fieldcolourpicker div.colourpicker table.colourpicker td:first-child {
-    border-right: 1px solid #bbb;
-}
-
-table.form tr.fieldcolourpicker div.colours table.colours {
-    border: 1px solid #bbb;
-    width: 100%;
-}
-table.form tr.fieldcolourpicker div.colours table.colours td {
-    background: #eee;
-    padding: 0.3em;
-}
-
 table.list table.fieldhistory tr td {
     padding: 0.5em;
     color: #555;
     text-align: left;
 }
-
 table.list > tbody > tr > td.truncate {
     white-space: nowrap;
     overflow: hidden;
@@ -975,17 +576,12 @@ table.list td dl dd {
     padding-left: 1em;
     width: 90%;
 }
-
 table.list td em {
     font-weight: bold;
 }
-
 p {
     margin: 0;
-    /* padding: 1em 0.5em 1em 0.5em; */
 }
-
-
 table.list tr > td.helpbutton {
     padding: 0.1em 0.5em 0.1em 0.2em;
     cursor: pointer;
@@ -993,167 +589,35 @@ table.list tr > td.helpbutton {
     text-align: right;
     width: 1.4em;
 }
-
-table.list > tbody > tr.followup > td {
-    font-size: 0.9em;
-    vertical-align: top;
-}
-
-table.form table.fieldhistory {
-    padding: 0em;
-    width: 100%;
-    empty-cells: show;
-}
-
-table.list table.fieldhistory tr td {
-    padding: 0.5em;
-    color: #555;
-    text-align: left;
-    font-size: 1em;
-    background: #eee;
-}
-
-table.border table.fieldhistory td {
-    border-bottom: 1px solid #777;
-}
-
-table.list table.fieldhistory td.fieldvalue {
-    text-align: right;
-    cursor: pointer;
-    white-space: pre-line;
-}
-
-table.list td.searchresults {
-    text-align: left;
-    padding: 0em;
-}
-
-table.list td.nosearchresults {
-    border-top: 1px solid #bbb;    
-    border-left: 1px solid #bbb;    
-    border-right: 1px solid #bbb;    
-    border-bottom: 1px solid #bbb;    
-}
-
-table.list td.nosearchresults {
-    text-align: left;
-    padding: 0.5em;
-}
-
-table.form table.simplegrid,
-table.list table.searchresults {
-    padding: 0em;
-    width: 100%;
-    empty-cells: show;
-    margin-bottom: 0em;
-}
-
-table.list table.searchresults tr td {
-    border-left: 1px solid #bbb;    
-    border-right: 1px solid #bbb;    
-    border-bottom: 1px solid #bbb; 
-}
-
-table.list table.searchresults tr td {
-    padding: 0.5em;
-    color: #555;
-    text-align: left;
-    font-size: 1em;
-    background: #eee;
-    cursor: pointer;
-}
-
-table.list table.searchresults tr:first-child td {
-    border-top: 1px solid #bbb;
-}
-
-table.border table.searchresults td {
-    border-bottom: 1px solid #bbb;
-}
-table.border table.searchresults tr:last-child td {
-    border-bottom: 0px;
-}
-
-table.list table.searchresults td.fieldvalue {
-    text-align: right;
-    cursor: pointer;
-}
-
-table.list table.searchresults td.buttons {
-    text-align: right;
-    padding: 0.2em 0.5em 0.2em 0.5em;
-}
-
-table.list table.searchresults td.buttons > button {
-    text-align: center;
-    font-size: 0.8em !important;
-    padding: 0.2em 0.8em 0.2em 0.8em;
-}
-
-table.list td.alert {
-    background: #fee;
-}
-
 table.simplegrid td.label {
     text-align: right;
 }
-
 table.simplegrid td.border {
     border-right: 1px solid #bbb;
 }
-
 table.simplegrid td.center {
     text-align: center;
 }
-
-table.dayschedule td.addlink,
-table.simplegrid td.addlink {
-    color: #bbb;
-    padding-left: 1.9em;
-}
-
-table.dayschedule td.addlink {
-    border-right: 0px;
-}
-
-table.list td div.dragdrop_cell {
-    width: 100%;
-    height: 1em;
-}
-
-table.simplegrid td.excel_deleted {
-    background: #ddd;
-}
-
-table.simplegrid td.excel_keep {
-    background: #efe;
-}
-
 table.list > tbody > tr > td.textbuttons {
     padding: 0.4em;
 }
-
 table.list > tbody > tr > td.multiline span.maintext {
     width: 100%;
     display: block;
 }
-
 table.list > tbody > tr > td span.subdue {
     font-size: 0.9em;
     font-decoration: normal;
     font-weight: normal;
     color: #999;
 }
-
 table.list > tbody > tr > td.multiline {
     padding: 0.5em 0.5em 0.45em 0.5em;
 }
-
 table.list > tbody > tr > td.multiline span.subtext {
     width: 100%;
     font-size: 0.8em;
     color: #999;
-/*    padding-top: 0.1em; */
     display: block;
 }
 table.list > tbody > tr > td.multiline > span.singleline {
@@ -1164,25 +628,14 @@ table.list > tbody > tr > td.multiline > span.singleline {
 table.list > tbody > tr > td.nobreak {
     white-space: nowrap;
 }
-
-table.list > tbody > tr > td.multiline span.subsubtext {
-    width: 100%;
-    font-size: 0.8em;
-    color: #999;
-    padding-top: 0.1em;
-    display: block;
-}
-
 table.list > tbody > tr > td.aligntop,
 table.list > tfoot > tr > td.aligntop {
     vertical-align: top;
 }
-
 table.list > tbody > tr > td.aligncenter,
 table.list > tfoot > tr > td.aligncenter {
     text-align: center;
 }
-
 table.list td span.icon {
     font-size: 1.1em;
     text-decoration: none;
@@ -1191,111 +644,41 @@ table.list td span.icon {
     max-height: 20px;
     vertical-align: top;
 }
-
-
 table.simplegrid td.lightborderright {
     border-right: 1px solid #ddd;
 }
-
-table.simplegrid td.thumbnail {
-    padding: 0.5em;
-    width: 2em;
-}
-
-table.simplegrid td.thumbnail img {
-}
-
-table.form td.input div.image_preview {
-    width: 100%;
-    text-align: center;
-}
-
-table.form td.input div.image_preview img {
-    background-color: #fff;
-    padding: 8px;
-    border: 1px solid #aaa;
-    max-width: 95%;
-}
-
-table.datepicker {
-    width: 100%;
-    table-layout: auto;
-}
-
-table.datepicker > tbody > tr > td.date {
-    text-align: center;
-}
-
-table.datepickersearch > tbody > tr > td.date {
-    text-align: left;
-}
-
-table.simplelist > tbody > tr > td.search,
-table.datepickersearch > tbody > tr > td.search {
-    text-align: right;
-    width: 40%;
-    padding: 0px;
-    vertical-align: middle;
-    padding-right: 0.5em;
-    padding-left: 0.5em;
-    margin-left: -0.5em;
-}
-
-table.simplelist > tbody > tr > td.search input,
-table.datepickersearch > tbody > tr > td.search input {
-    width: 100%;
-    height: 100%;
-    padding: 0.3em;
-    padding-right: 0;
-    font-size: 1.0em;
-    color: #555;
-    text-align: left;
-    margin: 0.3em;
-    text-overflow: ellipsis
-    white-space: nowrap;
-    border: 1px solid #ddd;    
-}
-
 table.form > tbody > tr > td.multiselect,
 table.form > tbody > tr > td.multitoggle,
 table.form > tbody > tr > td.joinedflags,
 table.form > tbody > tr > td.flags {
     padding: 0em 0.25em 0em 0.25em;
 }
-
 table.form > tbody > tr > td div.buttons {
     display: inline-block;
     padding-left: 0.6em;
     margin: 0px;
 }
-
 table.form > tbody > tr > td div.nopadbuttons {
     padding-left: 0em;
 }
-
 table.form > tbody > tr > td.multiselect div,
 table.form > tbody > tr > td.multitoggle div {
     display: inline-block;
 }
-
 table.form > tbody > tr > td.multiselect span.hint,
 table.form > tbody > tr > td.multitoggle span.hint {
     color: #999;
     padding-left: 0.6em;
 }
-
 table.form > tbody > tr > td.joinedflags div {
     display: table;
 }
-
 table.form span.flag_on {
     color: #000;
 }
-
 table.form span.flag_off {
     color: #bbb;
 }
-
 table.form td.joinedflags span.flag_on,
 table.form td.joinedflags span.flag_off, 
 table.form td div span.toggle_on,
@@ -1308,80 +691,45 @@ table.form td div span.toggle_off {
     cursor: pointer;
     font-size: 0.9em;
 }
-
 table.form td div span.toggle_on {
     color: #000;
 }
-
 table.form td div span.toggle_off {
     color: #bbb;
 }
-
 table.form td span.flag_on span.icon,
 table.form td span.flag_off span.icon,
 table.form td span.toggle_on span.icon,
 table.form td span.toggle_off span.icon {
     color: inherit;
 }
-
-table.paneltabs {
-    margin-bottom: 0.5em;
-}
-
-table.paneltabs > tbody > tr > td {
-    padding: 0em;
-}
-
-table.paneltabs td div span.toggle_on,
-table.paneltabs td div span.toggle_off {
-    font-size: 1.0em;
-    margin: 0em;
-}
-
 span.username {
 }
-
-span.age {
-    font-size: 0.8em;
-    color: #888;
-    font-style: italic;
-}
-
 input.submit {
     color: #333;
     font-size: 1em;
 }
-
 .clickable {
     cursor: pointer;
 }
-
-table.services > tbody > tr > td.jobs {
-    padding: 0.1em;
-}
-
 /* Text block markups */
 div.wide table.text {
     min-width: 40em;
     table-layout: auto;
 }
-
 table.text tr.text td pre {
     overflow-x: scroll;
 }
-
 table.text tr.text td p:first-child,
 table.text tr.text td pre:first-child {
     padding-top: 0px;
     margin-top: 0px;
 }
-
 table.text tr.text td p:last-child,
 table.text tr.text td pre:last-child {
     padding-bottom: 0px;
     margin-bottom: 0px;
 }
-
 /********** Error screen ********/
 #m_error {
     position: absolute;
@@ -1391,7 +739,6 @@ table.text tr.text td pre:last-child {
     width: 100%;
     height: 90%;
 }
-
 #m_error button {
     width: 10em;
     margin-top: 5px;
@@ -1401,8 +748,6 @@ table.text tr.text td pre:last-child {
     color: #333;
     cursor: pointer;
 }
-
-
 /********** Loading Spinner **************/
 #m_loading {
     width: 100%;
@@ -1432,39 +777,21 @@ table.form td.search input,
 table.form td.multiselect input,
 table.form td.input input {
     -webkit-border-radius: 3px;
-    -webkit-box-shadow: #eee 0px 1px 1px inset;
+    -webkit-box-shadow: #eee 0px 1px 1px inset; 
     border: 1px solid #ddd;
     margin-right: 1.5em;
     box-sizing: border-box;
 }
-
-table.simplelist input,
-table.datepicker input {
-    -webkit-border-radius: 3px;
-    -webkit-box-shadow: #eee 0px 1px 1px inset;
-}
-
-input, textarea {
-    -webkit-appearance: none;
-}
-
 input:focus {
     outline: none;
 }
-
-table.form tr.textfield > td > input.search {
-    height: 2.0em;
-}
-
 h2 {
     text-shadow: #fff 1px 1px 0px;
 }
-
 span.count {
     -webkit-border-radius: 1.2em;
     text-shadow: #fff 1px 1px 0px;
 }
-
 button, input.button {
     box-sizing: border-box;
     border-radius: 3px;
@@ -1477,18 +804,15 @@ button, input.button {
     font-weight: bold;
     width: 100%;
 }
-textarea {
+input, textarea {
     -webkit-appearance: none;
 }
-
 input:-webkit-autofill {
     background: #fff !important;
 }
-
 table.list {
     -webkit-border-radius: 3px;
 }
-
 table.list > tbody:first-child > tr:first-child > td:first-child > textarea,
 table.list > tbody:first-child > tr table,
 table.list > tbody:first-child > tr table tr:first-child > td:first-child,
@@ -1497,7 +821,6 @@ table.noheader > tbody:first-child > tr:first-child > td:first-child,
 table.list > tfoot:first-child > tr:first-child > td:first-child {
     -webkit-border-top-left-radius: 3px;
 }
-
 table.list > tbody:first-child > tr:first-child > td:last-child > textarea,
 table.list > tbody:first-child > tr table,
 table.list > tbody:first-child > tr table tr:first-child > td:last-child,
@@ -1523,11 +846,6 @@ table.list > tbody:last-child > tr:last-child > td:last-child,
 table.list > tfoot > tr:last-child > td:last-child {
     -webkit-border-bottom-right-radius: 3px;
 }
-
-table.list td > div.colourswatches > span.selected {
-    -webkit-box-shadow: #777 1px 1px 3px;
-}
-
 body {
     font-size: 100%;
     color: #303030;
@@ -1573,98 +891,28 @@ div.medium {
     max-width: 40em;
     margin: 0 auto;
 }
-
-div.mediumflex {
-    min-width: 30em;
-    max-width: 50em;
-    margin: 0 auto;
-}
-
-div.large {
-    width: 50em;
-    max-width: 95%;
-    margin: 0 auto;
-}
-
-div.xlarge {
-    width: 60em;
-    max-width: 95%;
-    margin: 0 auto;
-}
-
-div.panel {
-    text-align: center;
-    margin: 0 auto;
-    width: 100%;
-}
-
-div.wide {
-    display: inline-block;
-    text-align: center;
-    margin: 0 auto;
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
-div.narrow h2,
-div.mediumflex h2,
-div.medium h2 {
-    width: 100%;
-}
-
-div.headerbar {
-    font-size: 1em;
-    margin: 0px;
-    padding: 0px;
-    height: 2.5em;
-    width: 100%;
-    border-bottom: 1px solid #ddd;
-}
-
 input {
     padding: 0.2em;
 }
-
 #m_help {
     float: right;
     min-height: 100%;
 }
-
-table.list tr.textfield > td > input.datetime {
-    max-width: 12em;
-}
-
-table.list tr.textfield > td > input.timeduration {
-    max-width: 6em;
-}
-
-table.list tr.gridfields > td.input input.integer,
 table.list tr.gridfields > td.input input.small,
-table.list tr.gridfields > td.input input.date,
-table.list tr.gridfields > td.input input.hexcolour,
-table.list tr.gridfields > td.input input.time,
-table.list tr > td input.integer,
-table.list tr > td input.small,
-table.list tr > td input.date,
-table.list tr > td input.hexcolour,
-table.list tr > td input.time {
+table.list tr > td input.small {
     max-width: 8em;
 }
-
 table.list tr.textfield > td > input.medium {
     max-width: 15em;
 }
-
 table.list tr.textfield > td > input.large {
     max-width: 45em;
 }
-
 table.list > tbody > tr.followup > td.userdetails {
     border-right: 1px dashed #bbb;
     text-decoration: normal;
     white-space: nowrap;
 }
-
 table.list > tbody > tr.followup > td.content {
     text-decoration: normal;
     white-space: pre-wrap;
@@ -1676,12 +924,11 @@ table.help td:first-child {
     text-align: right;
     min-width: 3em;
     padding-right: 1em;
-}
+} 
 table.list tr.textfield > td.select {
     width: 100%;
     height: 100%;
 }
-
 table.form td.input > select,
 table.form td.select > select {
     width: 100%;
@@ -1696,7 +943,6 @@ table.form td.select > select {
     white-space: nowrap;
     border: 1px solid #ccc;
 }
-
 table.form td.input > select {
     height: 2em;
     margin: 0em;
@@ -1708,9 +954,10 @@ table.form td.small input {
 table.form td.tiny input {
     max-width: 5em;
 }
-
-
 </style>
+<meta content='text/html;charset=UTF-8' http-equiv='Content-Type' />
+<meta content='UTF-8' http-equiv='encoding' />
+<meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=yes' />
 </head>
 <body id="m_body">
 <div id="m_loading" style="display:none;"><table><tr><td><?php print "<img src='ciniki-mods/core/ui/themes/default/img/spinner.gif' />"; ?>
@@ -1746,10 +993,10 @@ table.form td.tiny input {
                             <tbody>
                             <tr class="textfield"><td class="label"><label for="callsign">Station Callsign</label></td>
                                 <td class="input small"><input type="text" id="callsign" name="callsign" /></td></tr>
-                            <tr class="textfield"><td class="label"><label for="ssid">SSID</label></td>
+                            <tr class="textfield"><td class="label"><label for="ssid">APRS SSID</label></td>
                                 <td class="input tiny"><input type="text" id="ssid" name="ssid" /></td></tr>
-                            <tr class="textfield"><td class="label"></td>
-                                <td class="input">The SSID is the station SSID after the callsign. 
+                            <tr class="textfield">
+                                <td class="input" colspan="2">The SSID is the station SSID after the callsign. 
                                 The following are recommended values for APRS:<br/>
                                 <table class="help"><td>0</td><td>No SSID</td></tr>
                                 <tr><td>1-4</td><td>Digipeaters</td></tr>
@@ -1766,6 +1013,10 @@ table.form td.tiny input {
                                 <tr><td>15</td><td>Any other use</td></tr>
                                 </table>
                                 </td></tr>
+                            </tbody>
+                        </table>
+                        <table class="list noheader form outline" cellspacing='0' cellpadding='0'>
+                            <tbody>
                             <tr class="textfield"><td class="label"><label for="timezone">Timezone</label></td>
                                 <td class="input"><select id='timezone' name='timezone'>
 <?php
