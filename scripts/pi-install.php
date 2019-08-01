@@ -1510,7 +1510,7 @@ function install($ciniki_root, $modules_dir, $args) {
     //
     symlink($ciniki_root . '/ciniki-mods/core/scripts/sync.php', $ciniki_root . '/ciniki-sync.php');
     symlink($ciniki_root . '/ciniki-mods/core/scripts/json.php', $ciniki_root . '/ciniki-json.php');
-    symlink($ciniki_root . '/ciniki-mods/core/scripts/manage.php', $ciniki_root . '/ciniki-manage.php');
+    symlink($ciniki_root . '/qruqsp-mods/core/scripts/manage.php', $ciniki_root . '/ciniki-manage.php');
     symlink($ciniki_root . '/ciniki-mods/core/scripts/login.php', $ciniki_root . '/ciniki-login.php');
 
     $rc = ciniki_core_dbTransactionCommit($ciniki, 'core');
