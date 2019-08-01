@@ -164,11 +164,11 @@ else {
             'database_password' => $mycnf['client']['password'],
             'database_name' => 'qruqsp',
             'admin_email' => $_POST['email'],
-            'admin_username' => strtolower($_POST['callsign']),
+            'admin_username' => strtolower($_POST['username']),
             'admin_password' => $_POST['password'],
             'admin_firstname' => $_POST['first'],
             'admin_lastname' => $_POST['last'],
-            'admin_display_name' => strtoupper($_POST['callsign']),
+            'admin_display_name' => strtoupper($_POST['username']),
             'master_name' => strtoupper($_POST['callsign']) . (isset($_POST['ssid']) && $_POST['ssid'] != '' ? '-' . $_POST['ssid'] : ''),
             'system_email' => $_POST['email'],
             'system_email_name' => $_POST['callsign'],
@@ -994,8 +994,25 @@ table.form td.tiny input {
                             <tr class="textfield"><td class="label"><label for="callsign">Station Callsign</label></td>
                                 <td class="input small"><input type="text" id="callsign" name="callsign" /></td></tr>
                             <tr class="textfield"><td class="label"><label for="ssid">APRS SSID</label></td>
-                                <td class="input tiny"><input type="text" id="ssid" name="ssid" /></td></tr>
-                            <tr class="textfield">
+                                <td class="input tiny"><select id="ssid" name="ssid">
+                                <option value="">0 - No SSID</option>
+                                <option value="1">1 - Digipeater</option>
+                                <option value="2">2 - Digipeater</option>
+                                <option value="3">3 - Digipeater</option>
+                                <option value="4">4 - Digipeater</option>
+                                <option value="5">5 - Smartphones</option>
+                                <option value="6">6 - Satellite or special operations</option>
+                                <option value="7">7 - Reserved for handhelds</option>
+                                <option value="8">8 - Boats or maritime mobile</option>
+                                <option value="9">9 - Mobiles or trackers</option>
+                                <option value="10">10 - Igates or internet operation</option>
+                                <option value="11">11 - Reserved for balloons</option>
+                                <option value="12">12 - Tracker Boxes</option>
+                                <option value="13">13 - Weather Stations</option>
+                                <option value="14">14 - Truckers</option>
+                                <option value="15">15 - Any other use</option>
+                                </select></td></tr>
+<?php /*                            <tr class="textfield">
                                 <td class="input" colspan="2">The SSID is the station SSID after the callsign. 
                                 The following are recommended values for APRS:<br/>
                                 <table class="help"><td>0</td><td>No SSID</td></tr>
@@ -1012,7 +1029,7 @@ table.form td.tiny input {
                                 <tr><td>14</td><td>Truckers</td></tr>
                                 <tr><td>15</td><td>Any other use</td></tr>
                                 </table>
-                                </td></tr>
+                                </td></tr> */ ?>
                             </tbody>
                         </table>
                         <table class="list noheader form outline" cellspacing='0' cellpadding='0'>
@@ -1032,6 +1049,8 @@ table.form td.tiny input {
                         <h2>Operator Information</h2>
                         <table class="list noheader form outline" cellspacing='0' cellpadding='0'>
                             <tbody>
+                            <tr class="textfield"><td class="label"><label for="username">Operator Callsign</label></td>
+                                <td class="input"><input type="text" id="username" name="username" /></td></tr>
                             <tr class="textfield"><td class="label"><label for="first">First Name</label></td>
                                 <td class="input"><input type="text" id="first" name="first" /></td></tr>
                             <tr class="textfield"><td class="label"><label for="last">Last Name</label></td>
