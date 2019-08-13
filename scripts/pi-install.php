@@ -1502,7 +1502,7 @@ function install($ciniki_root, $modules_dir, $args) {
         . "RewriteRule ^(ciniki-mods/web/themes/.*)$ $1 [L]                                     # Allow web-themes content\n"
         . "RewriteRule ^(qruqsp-mods/dashboard/themes/.*)$ $1 [L]                                     # Allow web-themes content\n"
         . "RewriteRule ^(ciniki-mods/web/cache/.*\.(css|js|jpg|png|mp3|ogg|wav))$ $1 [L]                                      # Allow web-cache content\n"
-        . "RewriteRule ^(ciniki-login|ciniki-sync|ciniki-json|index|ciniki-manage).php$ $1.php [L]  # allow entrance php files\n"
+        . "RewriteRule ^(ciniki-login|ciniki-sync|ciniki-json|index|ciniki-manage|qruqsp-dashboard).php$ $1.php [L]  # allow entrance php files\n"
         . "RewriteRule ^([_0-9a-zA-Z-]+/)(.*\.php)$ index.php [L]                                  # Redirect all other php requests to index\n"
         . "RewriteRule ^$ index.php [L]                                                              # Redirect all other requests to index\n"
         . "RewriteRule . index.php [L]                                                              # Redirect all other requests to index\n"
@@ -1533,6 +1533,7 @@ function install($ciniki_root, $modules_dir, $args) {
     symlink($ciniki_root . '/ciniki-mods/core/scripts/json.php', $ciniki_root . '/ciniki-json.php');
     symlink($ciniki_root . '/qruqsp-mods/core/scripts/manage.php', $ciniki_root . '/ciniki-manage.php');
     symlink($ciniki_root . '/ciniki-mods/core/scripts/login.php', $ciniki_root . '/ciniki-login.php');
+    symlink($ciniki_root . '/qruqsp-mods/dashboard/scripts/dashboard.php', $ciniki_root . '/qruqsp-dashboard.php');
 
     $rc = ciniki_core_dbTransactionCommit($ciniki, 'core');
     if( $rc['stat'] != 'ok' ) {
