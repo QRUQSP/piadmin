@@ -13,8 +13,8 @@ function qruqsp_piadmin_datetime() {
         'mc', 'narrow', 'sectioned', 'qruqsp.piadmin.datetime.main');
     this.main.sections = {
         'date':{'label':'', 'fields':{
-            '_date':{'label':'Date', 'type':'date'}, 
-            '_time':{'label':'Time', 'type':'text', 'size':'small'}, 
+            '_date':{'label':'UTC Date', 'type':'date'}, 
+            '_time':{'label':'UTC Time', 'type':'text', 'size':'small'}, 
             }},
         '_buttons':{'label':'', 'buttons':{
             'save':{'label':'Set Date & Time', 'fn':'M.qruqsp_piadmin_datetime.main.save();'},
