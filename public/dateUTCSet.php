@@ -42,7 +42,7 @@ function qruqsp_piadmin_dateUTCSet(&$ciniki) {
         return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.piadmin.4', 'msg'=>'Invalid date/time format'));
     }
 
-    $update_str = strftime("%Y-%m-%d %H:%M:%S", $ts);
+    $update_str = strftime("'%Y-%m-%d %H:%M:%S'", $ts);
     $output = `sudo date -u -s $update_str`;
 
     return array('stat'=>'ok');
