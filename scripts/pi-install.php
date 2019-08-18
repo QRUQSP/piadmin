@@ -64,6 +64,10 @@ $valid_args = array(
     '-un' => array('field'=>'server_name', 'mandatory'=>'yes'),
     '-ru' => array('field'=>'request_uri', 'mandatory'=>'no'),
     '-tz' => array('field'=>'timezone', 'mandatory'=>'no'),
+    '-la' => array('field'=>'latitude', 'mandatory'=>'no'),
+    '-lo' => array('field'=>'longitude', 'mandatory'=>'no'),
+    '-al' => array('field'=>'altitude', 'mandatory'=>'no'),
+    '-ri' => array('field'=>'radiointerfaceversion', 'mandatory'=>'no'),
     '-80' => array('field'=>'disable_ssl', 'mandatory'=>'no'),
     );
 //
@@ -93,6 +97,10 @@ if( php_sapi_name() == 'cli' ) {
         'request_uri' => '',
         'http_host' => '',
         'timezone' => 'UTC',
+        'latitude' => '',
+        'longitude' => '',
+        'altitude' => '',
+        'radiointerfaceversion' => '',
         );
     //
     // Grab the args into array
@@ -178,6 +186,10 @@ else {
             'http_host' => $_SERVER['HTTP_HOST'],
             'disable_ssl' => 'yes',
             'timezone' => $_POST['timezone'],
+            'latitude' => $_POST['latitude'],
+            'longitude' => $_POST['longitude'],
+            'altitude' => $_POST['altitude'],
+            'radiointerfaceversion' => $_POST['radiointerfaceversion'],
             );
 
         $rc = install($ciniki_root, $modules_dir, $args);
@@ -1012,24 +1024,11 @@ table.form td.tiny input {
                                 <option value="14">14 - Truckers</option>
                                 <option value="15">15 - Any other use</option>
                                 </select></td></tr>
-<?php /*                            <tr class="textfield">
-                                <td class="input" colspan="2">The SSID is the station SSID after the callsign. 
-                                The following are recommended values for APRS:<br/>
-                                <table class="help"><td>0</td><td>No SSID</td></tr>
-                                <tr><td>1-4</td><td>Digipeaters</td></tr>
-                                <tr><td>5</td><td>Smartphones</td></tr>
-                                <tr><td>6</td><td>Satellite or special operations</td></tr>
-                                <tr><td>7</td><td>Reserved for handhelds</td></tr>
-                                <tr><td>8</td><td>Boats or maritime mobile</td></tr>
-                                <tr><td>9</td><td>Mobiles or trackers</td></tr>
-                                <tr><td>10</td><td>Igates or internet operation</td></tr>
-                                <tr><td>11</td><td>Reserved for balloons</td></tr>
-                                <tr><td>12</td><td>Tracker Boxes</td></tr>
-                                <tr><td>13</td><td>Weather Stations</td></tr>
-                                <tr><td>14</td><td>Truckers</td></tr>
-                                <tr><td>15</td><td>Any other use</td></tr>
-                                </table>
-                                </td></tr> */ ?>
+                            <tr class="textfield"><td class="label"><label for="ssid">QRUQSP Radio Interface</label></td>
+                                <td class="input"><select id="radiointerfaceversion" name="radiointerfaceversion">
+                                    <option value="">None</option>
+                                    <option value="0.2">Radio Interface v0.2</option>
+                                </select></td></tr>
                             </tbody>
                         </table>
                         <table class="list noheader form outline" cellspacing='0' cellpadding='0'>
@@ -1044,6 +1043,14 @@ table.form td.tiny input {
     }
 ?>
                                 </select></td></tr>
+                            <tr class="textfield"><td class="label"><label for="latitude">Latitude (decimal degrees)</label></td>
+                                <td class="input"><input type='text' id='latitude' name='latitude' value='' /></td></tr>
+                            <tr class="textfield"><td class="label"><label for="longitude">Longitude (decimal degrees)</label></td>
+                                <td class="input"><input type='text' id='longitude' name='longitude' value='' /></td></tr>
+                            <tr class="textfield"><td class="label"><label for="altitude">Altitude (meters)</label></td>
+                                <td class="input"><input type='text' id='altitude' name='altitude' value='' /></td></tr>
+                            <tr class="textfield">
+                                <td class="input" colspan="2">Latitude and Longitude must be specified in Decimal Degrees, eg 44.296555, -79.609505. The Altitude must be in meters from sea level.<br/><br/>To lookup your position use: https://www.mapcoordinates.net/en</td></td>
                             </tbody>
                         </table>
                         <h2>Operator Information</h2>
@@ -1162,6 +1169,13 @@ function install($ciniki_root, $modules_dir, $args) {
         $config['ciniki.core']['manage.url'] = "https://" . $args['server_name'] . "/" . preg_replace('/^\//', '', dirname($args['request_uri']) . "manager");
     }
 
+    //
+    // Add coordinates
+    //
+    $config['ciniki.core']['latitude'] = $args['latitude'];
+    $config['ciniki.core']['longitude'] = $args['longitude'];
+    $config['ciniki.core']['altitude'] = $args['altitude'];
+
     // Configure users module settings for password recovery
     $config['ciniki.users']['password.forgot.notify'] = $admin_email;
     if( isset($args['disable_ssl']) && $args['disable_ssl'] == 'yes' ) {
@@ -1270,6 +1284,11 @@ function install($ciniki_root, $modules_dir, $args) {
             `sudo sed -i 's/wpa_passphrase=hamradio/wpa_passphrase=$admin_password/' /etc/hostapd/hostapd.conf`;
             `sudo service hostapd restart`;
         }
+
+        //
+        // Setup the hostname to the station name
+        //
+        `sudo echo '$master_name' >/etc/hostname`;
     }
 
     //
@@ -1404,6 +1423,19 @@ function install($ciniki_root, $modules_dir, $args) {
         }
 
         //
+        // Setup the default TNC if radio interface version specified
+        //
+        if( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '0.2' ) {
+            $strsql = "INSERT INTO qruqsp_tnc_devices (uuid, tnid, name, status, dtype, device, flags, settings, date_added, last_updated) "
+                . "VALUES (UUID(), '1', '144.390', 40, 10, '', 0, 'a:2:{s:7:\"ADEVICE\";s:10:\"plughw:1,0\";s:3:\"PTT\";s:7:\"GPIO 24\";}', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+            $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
+            if( $rc['stat'] != 'ok' ) {
+                ciniki_core_dbTransactionRollback($ciniki, 'core');
+                return array('form'=>'yes', 'err'=>'ciniki.' . $rc['err']['code'], 'msg'=>"Failed to setup database<br/><br/>" . $rc['err']['msg']);
+            }
+        }
+
+        //
         // Add the api key for the UI
         //
         $strsql = "INSERT INTO ciniki_core_api_keys (api_key, status, perms, user_id, appname, notes, "
@@ -1432,6 +1464,63 @@ function install($ciniki_root, $modules_dir, $args) {
         unlink($ciniki_root . '/ciniki-api.ini');
         ciniki_core_dbTransactionRollback($ciniki, 'core');
         return array('form'=>'yes', 'err'=>'ciniki.installer.99', 'msg'=>"Unable to write configuration, please check your website settings.");
+    }
+
+    //
+    // Make sure the proper settings in /boot/config.txt for the radio interface version
+    //
+    if( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '0.2' ) {
+        //
+        // Load boot config and check for any changes that are required
+        //
+        $boot_config = file_get_contents('/boot/config.txt');
+
+        //
+        // Check i2c is enabled
+        //
+        if( preg_match('/^\s*dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
+            if( $m[1] != 'on' ) {
+                $boot_config = preg_replace('/^(\s*dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $config);
+            }
+        } else {
+            $boot_config .= "dtparam=i2c_arm=on\n";
+        }
+
+        //
+        // Check for gpio shutdown pin
+        //
+        if( preg_match('/^\s*dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*([0-9]+)$/m', $boot_config, $m) ) {
+            if( $m[1] != 3 ) {
+                print "Replace\n";
+                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}3', $config);
+            }
+        } else {
+            $boot_config .= "dtoverlay=gpio-shutdown,gpio_pin=3\n";
+        }
+
+        //
+        // Check i2c is enabled on pins 17 and 27
+        //
+        if( preg_match('/^\s*dtoverlay\s*=\s*i2c-gpio(.*)$/m', $boot_config, $m) ) {
+            if( preg_match('/i2c_gpio_sda\s*=\s*([0-9]+)/', $m[1], $sda) ) {
+                if( $sda[1] != 17 ) {
+                    $boot_config = preg_replace('/^(\s*dtoverlay.*i2c-gpio.*i2c_gpio_sda\s*=\s*)([0-9]+)/m', '${1}17', $config);
+                }
+            }
+            if( preg_match('/i2c_gpio_scl\s*=\s*([0-9]+)/', $m[1], $scl) ) {
+                if( $scl[1] != 27 ) {
+                    $boot_config = preg_replace('/^(\s*dtoverlay.*i2c-gpio.*i2c_gpio_scl\s*=\s*)([0-9]+)/m', '${1}27', $config);
+                }
+            }
+        } else {
+            $boot_config .= "dtoverlay=i2c-gpio,i2c_gpio_sda=17,i2c_gpio_scl=27\n";
+        }
+
+        if( file_put_contents('/tmp/config.txt', $boot_config) !== false ) {
+            `sudo cp /boot/config.txt /boot/config.txt.backup`;
+            `sudo chown root:root /tmp/config.txt`;
+            `sudo mv /tmp/config.txt /boot/config.txt`;
+        }
     }
 
     //
@@ -1553,6 +1642,10 @@ function install($ciniki_root, $modules_dir, $args) {
         unlink($ciniki_root . '/index.php');
     }
     symlink($ciniki_root . '/ciniki-mods/web/scripts/index.php', $ciniki_root . '/index.php');
+
+    //
+    // Setup the /boot/config with radio interface board settings
+    //
 
     return array('form'=>'no', 'err'=>'installed', 'msg'=>'');
 }
