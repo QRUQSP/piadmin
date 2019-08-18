@@ -1050,7 +1050,7 @@ table.form td.tiny input {
                             <tr class="textfield"><td class="label"><label for="altitude">Altitude (meters)</label></td>
                                 <td class="input"><input type='text' id='altitude' name='altitude' value='' /></td></tr>
                             <tr class="textfield">
-                                <td class="input" colspan="2">Latitude and Longitude must be specified in Decimal Degrees, eg 44.296555, -79.609505. The Altitude must be in meters from sea level.<br/><br/>To lookup your position use: https://www.mapcoordinates.net/en</td></td>
+                                <td class="input" colspan="2">Latitude and Longitude must be specified in Decimal Degrees, eg 44.296555, -79.609505. The Altitude must be in meters from sea level.<br/><br/>To lookup your position use: <a target="_blank" href="https://www.mapcoordinates.net/en">www.mapcoordinates.net</a></td></td>
                             </tbody>
                         </table>
                         <h2>Operator Information</h2>
@@ -1192,7 +1192,7 @@ function install($ciniki_root, $modules_dir, $args) {
     $config['qruqsp.core']['log_dir'] = dirname($ciniki_root) . '/logs';
     $config['qruqsp.43392'] = array();
     $config['qruqsp.43392']['listener'] = 'active';
-    $config['qruqsp.43392']['rtl_433_cmd'] = '/ciniki/sites/qruqsp.local/site/qruqsp-mods/bin/rtl_433';
+    $config['qruqsp.43392']['rtl_433_cmd'] = '/ciniki/sites/qruqsp.local/site/qruqsp-mods/pibin/bin/rtl_433';
 
     //
     // Setup ciniki variable, just like ciniki-mods/core/private/init.php script, but we
