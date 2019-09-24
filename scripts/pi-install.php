@@ -1484,9 +1484,34 @@ function install($ciniki_root, $modules_dir, $args) {
         return array('form'=>'yes', 'err'=>'ciniki.installer.99', 'msg'=>"Unable to write configuration, please check your website settings.");
     }
 
+    //
+    // Setup the /boot/config.txt file
+    //
     $rc = setup_boot_config($args);
     if( $rc['stat'] != 'ok' ) {
-        return $rc;
+        return array('form'=>'yes', 'err'=>'ciniki.installer.99', 'msg'=>"Unable to update /boot/config.txt.");
+    }
+
+    //
+    // Setup files for Real Time Clock
+    //
+    if( (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '1.0')
+        || (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == 'CS-101')
+        ) {
+        `sudo apt-get -y remove fake-hwclock`;
+        `sudo update-rc.d -f fake-hwclock remove`;
+        `sudo systemctl disable fake-hwclock`;
+
+        $hwclock_set = file_get_contents('/lib/udev/hwclock-set');
+
+        $hwclock_set = preg_replace("/^(if [ -e \/run\/systemd\/system ] ; then)$^(\s*exit 0)$^(fi)$/m", '#{$1}\n#{$2}\n#{$3}\n', $hwclock_set);
+        $hwclock_set = preg_replace("/^(if [ yes = \"\$BADYEAR\" ] ; then)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz --badyear)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys --badyear)$^(else)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys)$^(fi)/m", '#{$1}\n#{$2}\n#{$3}\n#{$4}\n#{$5}\n{$6}\n#{$7}\n', $hwclock_set);
+
+        if( file_put_contents('/tmp/hwclock-set', $hwclock_set) !== false ) {
+            `sudo cp /lib/udev/hwclock-set /lib/udev/hwclock-set.backup`;
+            `sudo chown root:root /tmp/hwclock-set`;
+            `sudo mv /tmp/hwclock-set /lib/udev/hwclock-set`;
+        }
     }
 
     //
@@ -1610,8 +1635,11 @@ function install($ciniki_root, $modules_dir, $args) {
     symlink($ciniki_root . '/ciniki-mods/web/scripts/index.php', $ciniki_root . '/index.php');
 
     //
-    // Setup the /boot/config with radio interface board settings
+    // Setup the udev rules for accessing the SDR
     //
+    if( file_exists($ciniki_root . '/qruqsp-mods/pibin/rtl-sdr.rules') ) {
+        `sudo cp $ciniki_root/qruqsp-mods/pibin/rtl-sdr.rules /etc/udev/rules.d/`;
+    }
 
     return array('form'=>'no', 'err'=>'installed', 'msg'=>'');
 }
@@ -1619,102 +1647,103 @@ function install($ciniki_root, $modules_dir, $args) {
 //
 // Setup the radio interface
 //
-function setup_boot_config() {
+function setup_boot_config($args) {
     //
     // Load boot config and check for any changes that are required
     //
     $boot_config = file_get_contents('/boot/config.txt');
 
     //
-    // Make sure the proper settings in /boot/config.txt for the radio interface version
+    // Check i2c is enabled
     //
-    if( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '0.2' ) {
-        //
-        // Check i2c is enabled
-        //
+    if( (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '0.2') ) {
         if( preg_match('/^\s*dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
             if( $m[1] != 'on' ) {
-                $boot_config = preg_replace('/^(\s*dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $config);
+                $boot_config = preg_replace('/^(\s*dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $boot_config);
             }
+        } elseif( preg_match('/^#dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
+            $boot_config = preg_replace('/^#(dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $boot_config);
         } else {
             $boot_config .= "dtparam=i2c_arm=on\n";
         }
-
-        //
-        // Check for gpio shutdown pin
-        //
-        if( preg_match('/^\s*dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*([0-9]+)$/m', $boot_config, $m) ) {
-            if( $m[1] != 3 ) {
-                print "Replace\n";
-                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}3', $config);
-            }
-        } else {
-            $boot_config .= "dtoverlay=gpio-shutdown,gpio_pin=3\n";
-        }
-
         //
         // Check i2c is enabled on pins 17 and 27
         //
         if( preg_match('/^\s*dtoverlay\s*=\s*i2c-gpio(.*)$/m', $boot_config, $m) ) {
             if( preg_match('/i2c_gpio_sda\s*=\s*([0-9]+)/', $m[1], $sda) ) {
                 if( $sda[1] != 17 ) {
-                    $boot_config = preg_replace('/^(\s*dtoverlay.*i2c-gpio.*i2c_gpio_sda\s*=\s*)([0-9]+)/m', '${1}17', $config);
+                    $boot_config = preg_replace('/^(\s*dtoverlay.*i2c-gpio.*i2c_gpio_sda\s*=\s*)([0-9]+)/m', '${1}17', $boot_config);
                 }
             }
             if( preg_match('/i2c_gpio_scl\s*=\s*([0-9]+)/', $m[1], $scl) ) {
                 if( $scl[1] != 27 ) {
-                    $boot_config = preg_replace('/^(\s*dtoverlay.*i2c-gpio.*i2c_gpio_scl\s*=\s*)([0-9]+)/m', '${1}27', $config);
+                    $boot_config = preg_replace('/^(\s*dtoverlay.*i2c-gpio.*i2c_gpio_scl\s*=\s*)([0-9]+)/m', '${1}27', $boot_config);
                 }
             }
         } else {
             $boot_config .= "dtoverlay=i2c-gpio,i2c_gpio_sda=17,i2c_gpio_scl=27\n";
         }
-
-    } elseif( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '1.0' ) {
         //
-        // Check i2c is enabled
+        // The following lines are taken from /usr/bin/raspi-config script
         //
-        if( preg_match('/^\s*dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
-            if( $m[1] != 'on' ) {
-                $boot_config = preg_replace('/^(\s*dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $config);
-            }
-        } else {
-            $boot_config .= "dtparam=i2c_arm=on\n";
+        if( !file_exists("/etc/modprobe.d/raspi-blacklist.conf") ) {
+            `sudo touch /etc/modprobe.d/raspi-blacklist.conf`;
         }
+        `sudo sed /etc/modprobe.d/raspi-blacklist.conf -i -e "s/^\(blacklist[[:space:]]*i2c[-_]bcm2708\)/#\1/"`;
+        `sudo sed /etc/modules -i -e "s/^#[[:space:]]*\(i2c[-_]dev\)/\1/"`;
+        `sudo dtparam i2c_arm=on`;
+        `sudo modprobe i2c-dev`;
+    }
 
-        //
-        // Check for gpio shutdown pin
-        //
+    //
+    // Setup gpio shutdown pin
+    //
+    if( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '0.2' ) {
+        // GPIO Pin 3
         if( preg_match('/^\s*dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*([0-9]+)$/m', $boot_config, $m) ) {
             if( $m[1] != 3 ) {
-                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}27', $config);
+                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}3', $boot_config);
+            }
+        } else {
+            $boot_config .= "dtoverlay=gpio-shutdown,gpio_pin=3\n";
+        }
+    } elseif( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '1.0' ) {
+        // GPIO Pin 27
+        if( preg_match('/^\s*dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*([0-9]+)$/m', $boot_config, $m) ) {
+            if( $m[1] != 3 ) {
+                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}27', $boot_config);
             }
         } else {
             $boot_config .= "dtoverlay=gpio-shutdown,gpio_pin=27\n";
         }
     } elseif( isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == 'CS-101' ) {
-        //
-        // Check i2c is enabled
-        //
-        if( preg_match('/^\s*dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
-            if( $m[1] != 'on' ) {
-                $boot_config = preg_replace('/^(\s*dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $config);
-            }
-        } else {
-            $boot_config .= "dtparam=i2c_arm=on\n";
-        }
-
-        //
-        // Check for gpio shutdown pin
-        //
+        // GPIO Pin 23
         if( preg_match('/^\s*dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*([0-9]+)$/m', $boot_config, $m) ) {
             if( $m[1] != 3 ) {
-                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}23', $config);
+                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*gpio-shutdown\s*,\s*gpio_pin\s*=\s*)([0-9]+)$/m', '${1}23', $boot_config);
             }
         } else {
             $boot_config .= "dtoverlay=gpio-shutdown,gpio_pin=23\n";
         }
     }
+
+    //
+    // Setup real time clock
+    //
+    if( (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '1.0')
+        || (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == 'CS-101')
+        ) {
+        // Enable ds1307
+        if( preg_match('/^\s*dtoverlay\s*=\s*itc-rtc\s*,\s*ds1307\s*$/m', $boot_config, $m) ) {
+            if( $m[1] != 3 ) {
+                $boot_config = preg_replace('/^\s*(dtoverlay\s*=\s*itc-rtc\s*,\s*ds1307\s*$/m', '${1}', $boot_config);
+            }
+        } else {
+            $boot_config .= "dtoverlay=i2c-rtc,ds1307\n";
+        }
+        
+    }
+
 
     if( file_put_contents('/tmp/config.txt', $boot_config) !== false ) {
         `sudo cp /boot/config.txt /boot/config.txt.backup`;
@@ -1722,6 +1751,33 @@ function setup_boot_config() {
         `sudo mv /tmp/config.txt /boot/config.txt`;
     }
 
+    //
+    // Turn on i2c via raspi-config
+    //
+    if( (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == '1.0')
+        || (isset($args['radiointerfaceversion']) && $args['radiointerfaceversion'] == 'CS-101')
+        ) {
+        `sudo /usr/bin/raspi-config nonint do_i2c 0`;
+/*        if( preg_match('/^\s*dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
+            if( $m[1] != 'on' ) {
+                $boot_config = preg_replace('/^(\s*dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $boot_config);
+            }
+        } elseif( preg_match('/^#dtparam\s*=\s*i2c_arm\s*=\s*(.*)$/m', $boot_config, $m) ) {
+            $boot_config = preg_replace('/^#(dtparam\s*=\s*i2c_arm\s*=\s*)(.*)$/m', '${1}on', $boot_config);
+        } else {
+            $boot_config .= "dtparam=i2c_arm=on\n";
+        }
+        //
+        // The following lines are taken from /usr/bin/raspi-config script
+        //
+        if( !file_exists("/etc/modprobe.d/raspi-blacklist.conf") ) {
+            `sudo touch /etc/modprobe.d/raspi-blacklist.conf`;
+        }
+        `sudo sed /etc/modprobe.d/raspi-blacklist.conf -i -e "s/^\(blacklist[[:space:]]*i2c[-_]bcm2708\)/#\1/"`;
+        `sudo sed /etc/modules -i -e "s/^#[[:space:]]*\(i2c[-_]dev\)/\1/"`;
+        `sudo dtparam i2c_arm=on`;
+        `sudo modprobe i2c-dev`; */
+    }
     return array('stat'=>'ok');
 }
 
