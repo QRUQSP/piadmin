@@ -45,6 +45,11 @@ function qruqsp_piadmin_hooks_uiSettings(&$ciniki, $tnid, $args) {
             'edit'=>array('app'=>'qruqsp.piadmin.ethernet'),
             ); */
         $rsp['settings_menu_items'][] = array(
+            'priority'=>940,
+            'label'=>'Networking',
+            'edit'=>array('app'=>'qruqsp.piadmin.networking'),
+            );
+        $rsp['settings_menu_items'][] = array(
             'priority'=>910,
             'label'=>'Set Date and Time',
             'edit'=>array('app'=>'qruqsp.piadmin.datetime'),
