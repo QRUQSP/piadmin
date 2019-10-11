@@ -31,6 +31,11 @@ function qruqsp_piadmin_hooks_uiSettings(&$ciniki, $tnid, $args) {
         ) {
         $rsp['settings_menu_items'][] = array(
             'priority'=>950,
+            'label'=>'Set GPS Coordinates',
+            'edit'=>array('app'=>'qruqsp.piadmin.gpscoords'),
+            );
+        $rsp['settings_menu_items'][] = array(
+            'priority'=>950,
             'label'=>'Set SSH Password',
             'edit'=>array('app'=>'qruqsp.piadmin.sshpasswd'),
             );

@@ -1171,13 +1171,15 @@ function install($ciniki_root, $modules_dir, $args) {
         $config['ciniki.core']['manage.url'] = "https://" . $args['server_name'] . "/" . preg_replace('/^\//', '', dirname($args['request_uri']) . "manager");
     }
 
+/*    Moved into ciniki_tenant_details table
+    
     //
     // Add coordinates
     //
     $config['ciniki.core']['latitude'] = $args['latitude'];
     $config['ciniki.core']['longitude'] = $args['longitude'];
     $config['ciniki.core']['altitude'] = $args['altitude'];
-
+*/
     // Configure users module settings for password recovery
     $config['ciniki.users']['password.forgot.notify'] = $admin_email;
     if( isset($args['disable_ssl']) && $args['disable_ssl'] == 'yes' ) {
@@ -1398,6 +1400,42 @@ function install($ciniki_root, $modules_dir, $args) {
         if( $rc['stat'] != 'ok' ) {
             ciniki_core_dbTransactionRollback($ciniki, 'core');
             return array('form'=>'yes', 'err'=>'ciniki.' . $rc['err']['code'], 'msg'=>"Failed to setup timezone<br/><br/>" . $rc['err']['msg']);
+        }
+    
+        //
+        // Add the latitude, longitude and altitude
+        //
+        if( isset($args['latitude']) && isset($args['longitude']) && isset($args['altitude']) ) {
+            $args['latitude'] = $args['latitude'] != '' ? $args['latitude'] : 0;
+            $args['longitude'] = $args['longitude'] != '' ? $args['longitude'] : 0;
+            $args['altitude'] = $args['altitude'] != '' ? $args['altitude'] : 0;
+
+            $strsql = "INSERT INTO ciniki_tenant_details (tnid, detail_key, detail_value, date_added, last_updated) "
+                . "VALUES ("
+                . "'1', 'gps-current-latitude', '" . $args['latitude'] . "', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+            $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
+            if( $rc['stat'] != 'ok' ) {
+                ciniki_core_dbTransactionRollback($ciniki, 'core');
+                return array('form'=>'yes', 'err'=>'ciniki.' . $rc['err']['code'], 'msg'=>"Failed to setup latitude<br/><br/>" . $rc['err']['msg']);
+            }
+
+            $strsql = "INSERT INTO ciniki_tenant_details (tnid, detail_key, detail_value, date_added, last_updated) "
+                . "VALUES ("
+                . "'1', 'gps-current-longitude', '" . $args['longitude'] . "', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+            $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
+            if( $rc['stat'] != 'ok' ) {
+                ciniki_core_dbTransactionRollback($ciniki, 'core');
+                return array('form'=>'yes', 'err'=>'ciniki.' . $rc['err']['code'], 'msg'=>"Failed to setup longitude<br/><br/>" . $rc['err']['msg']);
+            }
+
+            $strsql = "INSERT INTO ciniki_tenant_details (tnid, detail_key, detail_value, date_added, last_updated) "
+                . "VALUES ("
+                . "'1', 'gps-current-altitude', '" . $args['altitude'] . "', UTC_TIMESTAMP(), UTC_TIMESTAMP())";
+            $rc = ciniki_core_dbInsert($ciniki, $strsql, 'tenants');
+            if( $rc['stat'] != 'ok' ) {
+                ciniki_core_dbTransactionRollback($ciniki, 'core');
+                return array('form'=>'yes', 'err'=>'ciniki.' . $rc['err']['code'], 'msg'=>"Failed to setup altitude<br/><br/>" . $rc['err']['msg']);
+            }
         }
         
         //
