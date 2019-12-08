@@ -53,7 +53,7 @@ $valid_args = array(
     '-dn' => array('field'=>'database_name', 'mandatory'=>'yes'),
     '-ae' => array('field'=>'admin_email', 'mandatory'=>'yes'),
     '-au' => array('field'=>'admin_username', 'mandatory'=>'yes'),
-    '-ap' => array('field'=>'admin_password', 'mandatory'=>'yes'),
+    '-ap' => array('field'=>'admin_password', 'mandatory'=>'yes', 'minlength'=>8),
     '-af' => array('field'=>'admin_firstname', 'mandatory'=>'no'),
     '-al' => array('field'=>'admin_lastname', 'mandatory'=>'no'),
     '-ad' => array('field'=>'admin_display_name', 'mandatory'=>'no'),
@@ -137,6 +137,9 @@ if( php_sapi_name() == 'cli' ) {
     foreach($valid_args as $k => $arg) {
         if( isset($arg['mandatory']) && $arg['mandatory'] == 'yes' && $args[$arg['field']] == '' ) {
             $missing .= "Missing argument: {$k} {$arg['field']} \n";
+        }
+        if( isset($arg['minlength']) && $arg['minlength'] > 0 && strlen($args[$arg['field']]) < $arg['minlength'] ) {
+            $missing .= "Password must be minimum 8 characters\n";
         }
     }
 
@@ -1067,7 +1070,8 @@ table.form td.tiny input {
                             <tr class="textfield"><td class="label"><label for="email">Email</label></td>
                                 <td class="input"><input type="email" id="email" name="email" /></td></tr>
                             <tr class="textfield"><td class="label"><label for="password">Password</label></td>
-                                <td class="input"><input type="password" id="password" name="password" /></td></tr>
+                                <td class="input"><input type="password" id="password" name="password" /><br/>
+                                <b>Must be minimum 8 characters</b></td></tr>
                             </tbody>
                         </table>
                         </div>
