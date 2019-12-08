@@ -1543,7 +1543,7 @@ function install($ciniki_root, $modules_dir, $args) {
         $hwclock_set = file_get_contents('/lib/udev/hwclock-set');
 
         $hwclock_set = preg_replace("/^(if [ -e \/run\/systemd\/system ] ; then)$^(\s*exit 0)$^(fi)$/m", '#{$1}\n#{$2}\n#{$3}\n', $hwclock_set);
-        $hwclock_set = preg_replace("/^(if [ yes = \"\$BADYEAR\" ] ; then)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz --badyear)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys --badyear)$^(else)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys)$^(fi)/m", '#{$1}\n#{$2}\n#{$3}\n#{$4}\n#{$5}\n{$6}\n#{$7}\n', $hwclock_set);
+        $hwclock_set = preg_replace("/^(if [ yes = \"\$BADYEAR\" ] ; then)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz --badyear)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys --badyear)$^(else)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys)$^(fi)/m", '{$1}\n#{$2}\n{$3}\n{$4}\n#{$5}\n{$6}\n{$7}\n', $hwclock_set);
 
         if( file_put_contents('/tmp/hwclock-set', $hwclock_set) !== false ) {
             `sudo cp /lib/udev/hwclock-set /lib/udev/hwclock-set.backup`;
