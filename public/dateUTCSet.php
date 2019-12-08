@@ -44,6 +44,7 @@ function qruqsp_piadmin_dateUTCSet(&$ciniki) {
 
     $update_str = strftime("'%Y-%m-%d %H:%M:%S'", $ts);
     $output = `sudo date -u -s $update_str`;
+    $output = `sudo hwclock -w`;
 
     return array('stat'=>'ok');
 }
