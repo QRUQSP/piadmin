@@ -1544,16 +1544,21 @@ function install($ciniki_root, $modules_dir, $args) {
         `sudo update-rc.d -f fake-hwclock remove`;
         `sudo systemctl disable fake-hwclock`;
 
-        $hwclock_set = file_get_contents('/lib/udev/hwclock-set');
+        `echo '# set the time from RTC now when it is available.' >/tmp/85-hwclock.rules`;
+        `echo 'KERNEL=="rtc0", RUN+="/sbin/hwclock --rtc=$root/$name --hctosys' >>/tmp/85-hwclock.rules`;
+        `sudo chown root:root /tmp/85-hwclock.rules`;
+        `sudo mv /tmp/85-hwclock.rules /etc/udev/rules.d/`;
 
-        $hwclock_set = preg_replace("/^(if [ -e \/run\/systemd\/system ] ; then)$^(\s*exit 0)$^(fi)$/m", '#{$1}\n#{$2}\n#{$3}\n', $hwclock_set);
-        $hwclock_set = preg_replace("/^(if [ yes = \"\$BADYEAR\" ] ; then)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz --badyear)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys --badyear)$^(else)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys)$^(fi)/m", '{$1}\n#{$2}\n{$3}\n{$4}\n#{$5}\n{$6}\n{$7}\n', $hwclock_set);
+//        $hwclock_set = file_get_contents('/lib/udev/hwclock-set');
 
-        if( file_put_contents('/tmp/hwclock-set', $hwclock_set) !== false ) {
-            `sudo cp /lib/udev/hwclock-set /lib/udev/hwclock-set.backup`;
-            `sudo chown root:root /tmp/hwclock-set`;
-            `sudo mv /tmp/hwclock-set /lib/udev/hwclock-set`;
-        }
+//        $hwclock_set = preg_replace("/^(if [ -e \/run\/systemd\/system ] ; then)$^(\s*exit 0)$^(fi)$/m", '#{$1}\n#{$2}\n#{$3}\n', $hwclock_set);
+//        $hwclock_set = preg_replace("/^(if [ yes = \"\$BADYEAR\" ] ; then)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz --badyear)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys --badyear)$^(else)$^(\s*\/sbin\/hwclock --rtc=\$dev --systz)$^(\s*\/sbin\/hwclock --rtc=\$dev --hctosys)$^(fi)/m", '{$1}\n#{$2}\n{$3}\n{$4}\n#{$5}\n{$6}\n{$7}\n', $hwclock_set);
+
+//        if( file_put_contents('/tmp/hwclock-set', $hwclock_set) !== false ) {
+//            `sudo cp /lib/udev/hwclock-set /lib/udev/hwclock-set.backup`;
+//            `sudo chown root:root /tmp/hwclock-set`;
+//            `sudo mv /tmp/hwclock-set /lib/udev/hwclock-set`;
+//        }
     }
 
     //
