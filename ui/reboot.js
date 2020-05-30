@@ -51,7 +51,7 @@ function qruqsp_piadmin_reboot() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_reboot', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     
@@ -71,7 +71,7 @@ function qruqsp_piadmin_reboot() {
         } catch(e) {
             // Check if reboot is taking longer than 120 seconds (2 minutes)
             if( Date.now() > this.main.start_ts + 120000 ) {
-                alert("The system has not come back online, this could because the IP address changed, "
+                M.alert("The system has not come back online, this could because the IP address changed, "
                     + "the WiFi or Network settings where changed prior to reboot. "
                     + "If nothings was changed, you may need to plug in a monitor to find out the issue.");
             }

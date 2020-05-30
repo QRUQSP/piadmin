@@ -29,7 +29,7 @@ function qruqsp_piadmin_shutdown() {
     this.main.save = function() {
         if( confirm('Are you sure you want to power off now?') ) {
             M.api.getJSONCb('qruqsp.piadmin.shutdown', {'tnid':M.curTenantID}, function(rsp) {
-                alert('Your system will now be powering off. You may now close this window.');
+                M.alert('Your system will now be powering off. You may now close this window.');
             });
         }
     }
@@ -47,7 +47,7 @@ function qruqsp_piadmin_shutdown() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_shutdown', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     

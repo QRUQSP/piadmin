@@ -60,7 +60,7 @@ function qruqsp_piadmin_gpscoords() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_gpscoords', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     

@@ -59,7 +59,7 @@ function qruqsp_piadmin_datetime() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_datetime', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     

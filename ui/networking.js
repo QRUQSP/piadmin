@@ -55,7 +55,7 @@ function qruqsp_piadmin_networking() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_networking', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     
