@@ -24,6 +24,9 @@ function qruqsp_piadmin_gpscoords() {
     this.main.fieldValue = function(s, i, d) {
         return this.data[i];
     }
+    this.main.fieldHistoryArgs = function(s, i) {
+        return {'method':'qruqsp.piadmin.gpsCoordsHistory', 'args':{'tnid':M.curTenantID, 'field':i}};
+    }
     this.main.open = function(cb) {
         M.api.getJSONCb('qruqsp.piadmin.gpsCoordsGet', {'tnid':M.curTenantID}, function(rsp) {
             if( rsp.stat != 'ok' ) {
@@ -60,7 +63,7 @@ function qruqsp_piadmin_gpscoords() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_gpscoords', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     

@@ -19,6 +19,7 @@ function qruqsp_piadmin_networking(&$ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
+        'iface'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Interface'),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -34,34 +35,53 @@ function qruqsp_piadmin_networking(&$ciniki) {
         return $rc;
     }
 
-    $rsp = array('stat'=>'ok', 'interfaces'=>array());
+    //
+    // Load the interfaces
+    //
+    ciniki_core_loadMethod($ciniki, 'qruqsp', 'piadmin', 'private', 'networkingLoad');
+    $rc = qruqsp_piadmin_networkingLoad($ciniki, $args['tnid']);
+    if( $rc['stat'] != 'ok' ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'qruqsp.piadmin.7', 'msg'=>'Unable to load interface details', 'err'=>$rc['err']));
+    }
+    $rsp = $rc;
+    $interfaces = $rc['interfaces'];
 
-    exec('ifconfig', $lines);
-    $interface = '';
-    $ip = '';
-    $netmask = '';
-    $mac = '';
-    foreach($lines as $line) {
-        if( preg_match("/^([^\s]*): /", $line, $m) ) {
-            $interface = $m[1];
-            $ip = '';
-            $netmask = '';
-            $mac = '';
-        }
-        elseif( preg_match("/^\s+inet ([0-9\.]+)\s+netmask ([0-9\.]+)\s+broadcast ([0-9\.]+)/", $line, $m) ) {
-            $ip = $m[1];
-            $netmask = $m[2];
-        }
-        elseif( preg_match("/^\s+ether ([0-9a-fA-F\:]+) /", $line, $m) ) {
-            $mac = $m[1];
-        }
-        elseif( $line == '' && $ip != '' ) {
-            $rsp['interfaces'][] = array(
-                'name' => $interface,
-                'ip' => $ip,
-                'netmask' => $netmask,
-                'mac' => $mac,
-                );
+    //
+    // Load the list of SSID's found on the wifi
+    //
+    if( isset($args['iface']) && $args['iface'] != '' ) {
+        $rsp['ssids'] = array(); 
+        foreach($interfaces as $interface) {
+            if( strncmp($interface['name'], 'wlan', 4) == 0 ) {
+                //
+                // Get the list of available wifi 
+                //
+                exec('sudo iwlist ' . $interface['name'] . ' scan', $lines);
+                foreach($lines as $line) {
+                    if( preg_match('/ESSID:"(.*)"/', $line, $m) && $m[1] != '' ) {
+                        $rsp['ssids'][] = $m[1];
+                    }
+                }
+                //
+                // Read the hostapd conf
+                //
+                if( file_exists('/etc/hostapd/hostapd.conf') ) {
+                    $lines = file('/etc/hostapd/hostapd.conf');
+                    foreach($lines as $line) {
+                        if( preg_match("/^\s*ssid\s*=\s*(.*)/", $line, $m) ) {
+                            $rsp['hostapd_ssid'] = $m[1];
+                        } elseif( preg_match("/^\s*channel\s*=\s*(.*)/", $line, $m) ) {
+                            $rsp['hostapd_channel'] = $m[1];
+                        } elseif( preg_match("/^\s*wpa_passphrase\s*=\s*(.*)/", $line, $m) ) {
+                            $rsp['hostapd_password'] = $m[1];
+                        }
+                    }
+                } else {
+                    $rsp['hostapd_ssid'] = '';
+                    $rsp['hostapd_channel'] = '';
+                    $rsp['hostapd_password'] = '';
+                }
+            }
         }
     }
 

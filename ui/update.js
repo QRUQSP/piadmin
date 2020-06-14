@@ -32,7 +32,7 @@ function qruqsp_piadmin_update() {
                 M.api.err(rsp);
                 return false;
             }
-            alert('done');
+            M.alert('done');
         });
     };
     this.main.addClose('Back');
@@ -49,7 +49,7 @@ function qruqsp_piadmin_update() {
         //
         var appContainer = M.createContainer('mc', 'qruqsp_piadmin_update', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
     
